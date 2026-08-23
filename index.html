@@ -5,58 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Générateur de Rapport TM</title>
 
-    <style>
-      :root {
-        /* Bleu professionnel */
-        --custom-color: #0056b3; 
-      }
-      
-      .bg-primary, .btn-primary {
-        background-color: var(--custom-color) !important;
-        border-color: var(--custom-color) !important;
-        color: white !important;
-      }
-      .text-primary {
-        color: var(--custom-color) !important;
-      }
-      
-      /* Style des boutons radios (non-sélectionné = blanc, sélectionné = bleu) */
-      .btn-custom-radio {
-        background-color: #ffffff !important;
-        color: #333333 !important;
-        border: 1px solid #ced4da !important;
-      }
-      .btn-custom-radio:hover {
-        background-color: #f8f9fa !important;
-      }
-      .btn-check:checked + .btn-custom-radio {
-        background-color: var(--custom-color) !important;
-        color: #ffffff !important;
-        border-color: var(--custom-color) !important;
-      }
-
-      /* Style des accordéons */
-      .accordion-button:not(.collapsed) {
-        background-color: rgba(0, 86, 179, 0.1);
-        color: var(--custom-color);
-      }
-      
-      /* Asterisque rouge pour les champs obligatoires */
-      .required-asterisk {
-        color: #dc3545;
-        font-weight: bold;
-        margin-left: 2px;
-      }
-      
-      /* Désactiver les coches vertes et cadres verts de Bootstrap pour les champs valides/optionnels */
-      .was-validated .form-control:valid, 
-      .form-control.is-valid {
-        border-color: #ced4da !important;
-        background-image: none !important;
-        padding-right: 0.75rem !important;
-        box-shadow: none !important;
-      }
-    </style>
   </head>
   <body>
     <div class="container mt-5 mb-5" style="max-width: 900px;">

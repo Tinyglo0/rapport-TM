@@ -1,3 +1,4 @@
+import './style.css';
 import 'bootswatch/dist/brite/bootstrap.min.css';
 import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 window.bootstrap = bootstrap; // Make it globally available just in case
