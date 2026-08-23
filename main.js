@@ -1,3 +1,6 @@
+import 'bootswatch/dist/brite/bootstrap.min.css';
+import bootstrap from 'bootstrap/dist/js/bootstrap.bundle.min.js';
+window.bootstrap = bootstrap; // Make it globally available just in case
 import { $typst, TypstSnippet } from '@myriaddreamin/typst.ts/dist/esm/contrib/all-in-one-lite.bundle.js';
 
 export async function setupTypst() {
