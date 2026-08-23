@@ -26,7 +26,7 @@
 #let formatted_date = parts.at(2) + "." + parts.at(1) + "." + parts.at(0)
 
 #if isFinal [
-  *Date :*  #h(1fr) *Note obtenue :* #text(size: 25pt)[#box(stroke: 1pt)[#align(center + horizon)[#square()[#data.at("note", default: "4.5")]]]]
+  *Date :* #formatted_date  #h(1fr) *Note obtenue :* #text(size: 25pt)[#box(stroke: 1pt)[#align(center + horizon)[#square()[#data.at("note", default: "4.5")]]]]
 ] else [
   *Date :* #formatted_date #h(1fr)
   #if data.evaluationType == "Première" { text(font: "Noto Sans Symbols")[#sym.ballot.cross] } else { sym.ballot } Première / #if data.evaluationType == "Seconde" { text(font: "Noto Sans Symbols")[#sym.ballot.cross] } else { sym.ballot } Seconde évaluation intermédiaire
@@ -131,9 +131,11 @@
     row-gutter: 2cm,
     align: bottom,
     ..data.auteurs.map(u => ([Prénom et nom de l'élève : ] + u.prenom + [ ] + u.nom,)).flatten(),
-    ..data.auteurs.map(u => [Signature : #box[#line(length: 5cm)]]).flatten()
+    ..data.auteurs.map(u => [Signature : #box[#line(length: 4cm)]]).flatten()
   )
 ] else [
+  #v(2cm)
+  Date : #formatted_date
   #grid(
     stroke: .0pt,
     columns: 2,
