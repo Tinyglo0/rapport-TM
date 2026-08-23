@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Générateur de Rapport TM</title>
+    <link rel="stylesheet" href="node_modules/bootswatch/dist/brite/bootstrap.min.css">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+      :root {
+        /* Bleu professionnel */
+        --custom-color: #0056b3; 
+      }
+      
+      .bg-primary, .btn-primary {
+        background-color: var(--custom-color) !important;
+        border-color: var(--custom-color) !important;
+        color: white !important;
+      }
+      .text-primary {
+        color: var(--custom-color) !important;
+      }
+      
+      /* Style des boutons radios (non-sélectionné = blanc, sélectionné = bleu) */
+      .btn-custom-radio {
+        background-color: #ffffff !important;
+        color: #333333 !important;
+        border: 1px solid #ced4da !important;
+      }
+      .btn-custom-radio:hover {
+        background-color: #f8f9fa !important;
+      }
+      .btn-check:checked + .btn-custom-radio {
+        background-color: var(--custom-color) !important;
+        color: #ffffff !important;
+        border-color: var(--custom-color) !important;
+      }
+
+      /* Style des accordéons */
+      .accordion-button:not(.collapsed) {
+        background-color: rgba(0, 86, 179, 0.1);
+        color: var(--custom-color);
+      }
+      
+      /* Asterisque rouge pour les champs obligatoires */
+      .required-asterisk {
+        color: #dc3545;
+        font-weight: bold;
+        margin-left: 2px;
+      }
+      
+      /* Désactiver les coches vertes et cadres verts de Bootstrap pour les champs valides/optionnels */
+      .was-validated .form-control:valid, 
+      .form-control.is-valid {
+        border-color: #ced4da !important;
+        background-image: none !important;
+        padding-right: 0.75rem !important;
+        box-shadow: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5 mb-5" style="max-width: 900px;">
+      <h1 class="mb-4">Générateur de Rapport TM</h1>
+      
+      <!-- novalidate pour gérer la validation nous-mêmes en JS -->
+      <form id="tm-form" novalidate>
+        <div class="accordion" id="formAccordion">
+          
+          <!-- Informations générales -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingGeneral">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGeneral" aria-expanded="true" aria-controls="collapseGeneral">
+                Informations générales
+              </button>
+            </h2>
+            <div id="collapseGeneral" class="accordion-collapse collapse show" aria-labelledby="headingGeneral" data-bs-parent="#formAccordion">
+              <div class="accordion-body">
+                <div class="row mb-3 align-items-center">
+                  <div class="col-md-4">
+                    <label for="date" class="form-label fw-bold">Date<span class="required-asterisk">*</span></label>
+                    <input type="date" class="form-control" id="date" style="max-width: 200px;" required>
+                    <div class="invalid-feedback">Veuillez sélectionner une date.</div>
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold d-block">Type d'évaluation<span class="required-asterisk">*</span></label>
+                    <div class="btn-group" role="group" aria-label="Choix de l'évaluation">
+                      <input type="radio" class="btn-check" name="evaluationType" id="eval1" value="Première" autocomplete="off" checked required>
+                      <label class="btn btn-custom-radio" for="eval1">Première</label>
+                      <input type="radio" class="btn-check" name="evaluationType" id="eval2" value="Seconde" autocomplete="off" required>
+                      <label class="btn btn-custom-radio" for="eval2">Seconde</label>
+                      <input type="radio" class="btn-check" name="evaluationType" id="eval3" value="Finale" autocomplete="off" required>
+                      <label class="btn btn-custom-radio" for="eval3">Finale</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-md-4" id="theme-container">
+                    <label for="theme" class="form-label fw-bold">Thème</label>
+                    <input type="text" class="form-control" id="theme">
+                  </div>
+                  <div class="col-md-4" id="repondant-container">
+                    <label for="repondant" class="form-label fw-bold">Répondant·e</label>
+                    <input type="text" class="form-control" id="repondant">
+                  </div>
+                  <div class="col-md-4" id="expert-container" style="display: none;">
+                    <label for="expert" class="form-label fw-bold">Expert·e (Finale)</label>
+                    <input type="text" class="form-control" id="expert">
+                  </div>
+                </div>
+
+                <div class="row mb-2">
+                  <div class="col-12" id="titre-container">
+                    <label for="titre" class="form-label fw-bold">Titre<span class="required-asterisk">*</span></label>
+                    <input type="text" class="form-control" id="titre" required>
+                    <div class="invalid-feedback">Le titre est obligatoire.</div>
+                  </div>
+                  <div class="col-md-3" id="note-container" style="display: none;">
+                    <label for="note" class="form-label fw-bold">Note (Finale)</label>
+                    <input type="text" class="form-control" id="note">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auteurs -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingAuteurs">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAuteurs" aria-expanded="false" aria-controls="collapseAuteurs">
+                Auteurs et Co-auteurs
+              </button>
+            </h2>
+            <div id="collapseAuteurs" class="accordion-collapse collapse" aria-labelledby="headingAuteurs" data-bs-parent="#formAccordion">
+              <div class="accordion-body">
+                <div id="auteurs-container">
+                  <!-- Auteur 1 -->
+                  <div class="auteur-row row mb-3 align-items-end">
+                    <div class="col-md-4">
+                      <label class="form-label fw-bold">Prénom<span class="required-asterisk">*</span></label>
+                      <input type="text" class="form-control prenom-input" required>
+                      <div class="invalid-feedback">Requis.</div>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="form-label fw-bold">Nom<span class="required-asterisk">*</span></label>
+                      <input type="text" class="form-control nom-input" required>
+                      <div class="invalid-feedback">Requis.</div>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label fw-bold">Classe<span class="required-asterisk">*</span></label>
+                      <input type="text" class="form-control classe-input" required>
+                      <div class="invalid-feedback">Requis.</div>
+                    </div>
+                    <div class="col-md-1">
+                      <!-- Pas de bouton supprimer pour le premier auteur -->
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary mt-2" id="add-auteur-btn">
+                  + Ajouter un·e autre auteur·trice
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Travail effectué -->
+          <div class="accordion-item" id="accordion-item-travail">
+            <h2 class="accordion-header" id="headingTravail">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTravail" aria-expanded="false" aria-controls="collapseTravail">
+                Travail effectué et résultats
+              </button>
+            </h2>
+            <div id="collapseTravail" class="accordion-collapse collapse" aria-labelledby="headingTravail" data-bs-parent="#formAccordion">
+              <div class="accordion-body">
+                <div class="mb-3">
+                  <label for="travail" class="form-label fw-bold">Travail effectué, résultats obtenus jusqu'ici</label>
+                  <textarea class="form-control" id="travail" rows="6"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Évaluation du travail -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEvaluation">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEvaluation" aria-expanded="false" aria-controls="collapseEvaluation">
+                Évaluation du travail
+              </button>
+            </h2>
+            <div id="collapseEvaluation" class="accordion-collapse collapse" aria-labelledby="headingEvaluation" data-bs-parent="#formAccordion">
+              <div class="accordion-body">
+                <div class="mb-4">
+                  <label for="recherches" class="form-label fw-bold">Recherches et méthodes de travail</label>
+                  <textarea class="form-control" id="recherches" rows="4"></textarea>
+                </div>
+                
+                <div class="mb-4">
+                  <label for="contenu" class="form-label fw-bold">Contenu et sens</label>
+                  <textarea class="form-control" id="contenu" rows="4"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="structure" class="form-label fw-bold">Structure de l'opuscule</label>
+                  <textarea class="form-control" id="structure" rows="4"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="expression" class="form-label fw-bold">Expression</label>
+                  <textarea class="form-control" id="expression" rows="4"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="presentation" class="form-label fw-bold">Présentation</label>
+                  <textarea class="form-control" id="presentation" rows="4"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="sensCritique" class="form-label fw-bold">Sens critique, lucidité sur son travail</label>
+                  <textarea class="form-control" id="sensCritique" rows="4"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Consignes -->
+          <div class="accordion-item" id="accordion-item-consignes">
+            <h2 class="accordion-header" id="headingConsignes">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseConsignes" aria-expanded="false" aria-controls="collapseConsignes">
+                Consignes pour la suite
+              </button>
+            </h2>
+            <div id="collapseConsignes" class="accordion-collapse collapse" aria-labelledby="headingConsignes" data-bs-parent="#formAccordion">
+              <div class="accordion-body">
+                <div class="mb-3">
+                  <label for="consignes" class="form-label fw-bold">Consignes, demandes du répondant pour la suite du travail</label>
+                  <textarea class="form-control" id="consignes" rows="6"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Remarques -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingRemarques">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRemarques" aria-expanded="false" aria-controls="collapseRemarques">
+                Remarques
+              </button>
+            </h2>
+            <div id="collapseRemarques" class="accordion-collapse collapse" aria-labelledby="headingRemarques" data-bs-parent="#formAccordion">
+              <div class="accordion-body">
+                <div class="mb-3">
+                  <label for="remarques" class="form-label fw-bold">Remarques</label>
+                  <textarea class="form-control" id="remarques" rows="4"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        <div class="mt-4 text-end">
+          <button type="submit" class="btn btn-primary btn-lg" id="generate-btn">
+            Générer le PDF
+          </button>
+        </div>
+      </form>
+      
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
