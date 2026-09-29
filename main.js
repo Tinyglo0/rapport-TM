@@ -313,10 +313,12 @@ document.getElementById('export-btn')?.addEventListener('click', () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   
-  const dateStr = data.date || new Date().toISOString().split('T')[0];
-  const titreClean = (data.titre || 'rapport').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+  const now = new Date();
+  const dateFormatted = now.toLocaleDateString('fr-FR').replace(/\//g, '-');
+  const timeFormatted = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }).replace(':', 'h');
+  
   a.href = url;
-  a.download = `tm_${dateStr}_${titreClean}.json`;
+  a.download = `rapport_TM_${dateFormatted}_${timeFormatted}.json`;
   a.click();
   URL.revokeObjectURL(url);
 });
