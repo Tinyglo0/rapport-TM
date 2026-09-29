@@ -3,6 +3,7 @@
   margin: (x: 1.5cm, y: 1.5cm),
   numbering: (page, total) => [Page #page sur #total],
 )
+#set par(justify: true)
 #set text(font: ("Arial", "Noto Sans Symbols"), size: 11pt)
 #show block: set block(breakable: false)
 #let data = json("/data.json")
