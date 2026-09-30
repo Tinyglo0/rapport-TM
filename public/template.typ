@@ -67,8 +67,9 @@
   #v(0.2cm)
 ]
 
-#let item(num, text) = {
-  if isFinal [ #strong[#num. #text] ] else [- #text]
+#let item(num, texte) = {
+  let message = if isFinal { strong[#num. #texte] } else { [- #texte] }
+  block(sticky: true)[#message]
 }
 
 #item("1", "Recherches et méthodes de travail")
