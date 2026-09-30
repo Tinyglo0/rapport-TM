@@ -341,3 +341,42 @@ document.getElementById('import-file')?.addEventListener('change', (e) => {
   reader.readAsText(file);
   e.target.value = ''; // Permet de re-sélectionner le même fichier si besoin
 });
+
+// Reset form
+document.getElementById('reset-btn')?.addEventListener('click', () => {
+  if (confirm('Êtes-vous sûr de vouloir commencer un nouveau rapport ? Toutes les données actuelles seront effacées.')) {
+    // 1. Réinitialiser les champs standards
+    document.getElementById('tm-form').reset();
+    
+    // 2. Réinitialiser les auteurs dynamiques (garder seulement le premier)
+    const container = document.getElementById('auteurs-container');
+    const rows = container.querySelectorAll('.auteur-row');
+    rows.forEach((row, index) => {
+      if (index > 0) {
+        container.removeChild(row);
+      } else {
+        // Vider les champs du premier auteur
+        row.querySelector('.prenom-input').value = '';
+        row.querySelector('.nom-input').value = '';
+        row.querySelector('.classe-input').value = '';
+      }
+    });
+    
+    // 3. Effacer la sauvegarde locale
+    localStorage.removeItem('tm-form-autosave');
+    
+    // 4. Déclencher l'événement change sur le type d'évaluation par défaut pour réinitialiser l'affichage
+    const defaultRadio = document.querySelector('input[name="evaluationType"][value="Première"]');
+    if (defaultRadio) {
+      defaultRadio.checked = true;
+      defaultRadio.dispatchEvent(new Event('change'));
+    }
+    
+    // 5. Fermer le drawer
+    const offcanvasEl = document.getElementById('offcanvasLeft');
+    if (offcanvasEl && window.bootstrap) {
+      const bsOffcanvas = window.bootstrap.Offcanvas.getInstance(offcanvasEl) || new window.bootstrap.Offcanvas(offcanvasEl);
+      bsOffcanvas.hide();
+    }
+  }
+});
